@@ -5,490 +5,441 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mirapakaya Media | Creative Production & Marketing</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS VARIABLES & RESET --- */
         :root {
-            --primary-red: #ff173a;
-            --primary-dark: #9c0015;      
-            --bg-deep-red: #d42929;       
-            --pure-white: #ffffff;
-            --off-white: #f8f8f8;
-            --pure-black: #0a0a0a;
-            --dark-grey: #1f1f1f;
-            --text-grey: #444444;
-            --primary-color: var(--primary-red);
-            --secondary-color: var(--pure-white);
-            --text-main: var(--pure-black);
-            --text-muted: var(--text-grey);
-            --border-color: rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --red: #FF1744;
+            --orange: #FF9100;
+            --black: #050505;
+            --off-black: #111111;
+            --white: #FFF;
+            --grey: #9E9E9E;
+            --pr-color: #9999FF;
+            --ae-color: #D8A0FF;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        /* Prevent horizontal overflow from animations */
-        body { background-color: var(--secondary-color); color: var(--text-main); line-height: 1.6; overflow-x: hidden; width: 100%; }
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        img { display: block; max-width: 100%; height: auto; }
-
-        /* --- NAVIGATION --- */
-        header {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; overflow-x: hidden; }
+        
+        /* --- DYNAMIC BACKGROUNDS (Glows & Chillies) --- */
+        .bg-dynamic { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+        
+        /* The Moving Grid */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 23, 68, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
         }
-        nav { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
-        
-        .logo { font-size: 1.6rem; font-weight: 800; letter-spacing: 0.5px; color: var(--pure-black); display: flex; align-items: center; gap: 8px; z-index: 1001; }
-        .logo i { color: var(--primary-color); transform: rotate(-20deg); font-size: 1.4rem; }
-        .logo span { color: var(--primary-color); }
-        
-        .nav-links { display: flex; gap: 2rem; }
-        .nav-links a { font-size: 1rem; font-weight: 600; transition: var(--transition); color: var(--dark-grey); }
-        .nav-links a:hover { color: var(--primary-color); }
-        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--pure-black); z-index: 1001; }
+        @keyframes gridMove { 0% { transform: translateY(0); } 100% { transform: translateY(50px); } }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            /* Changed to min-height and dvh for better mobile browser support */
-            min-height: 100vh; 
-            min-height: 100dvh;
-            display: flex; align-items: center; justify-content: center; text-align: center;
-            padding: 6rem 2rem 2rem 2rem; /* Added top padding for navbar */
-            background-color: var(--pure-white); position: relative; overflow: hidden;
+        /* Generic Glow Orb Style */
+        .bg-orb {
+            position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.18;
+            width: 250px; height: 250px;
+            animation: breathe 8s infinite alternate ease-in-out;
         }
-        
-        .hero::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px; opacity: 1; z-index: 1; pointer-events: none;
-        }
+        @keyframes breathe { 0% { transform: scale(1); opacity: 0.15; } 100% { transform: scale(1.2); opacity: 0.25; } }
 
-        /* --- SPOTLIGHTS --- */
-        .hero-spotlights { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
-        .spotlight { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; animation: moveSpotlight 15s infinite alternate ease-in-out; }
+        /* Specific Positions for "Random" Feel */
+        .orb-hero-1 { background: var(--red); top: -50px; left: -50px; }
+        .orb-hero-2 { background: var(--orange); bottom: -50px; right: -50px; width: 200px; height: 200px; }
         
-        /* Adjusted sizes for responsiveness */
-        .spotlight-1 { width: 50vw; height: 50vw; max-width: 600px; max-height: 600px; background: var(--primary-red); top: -10%; left: -10%; opacity: 0.40; }
-        .spotlight-2 { width: 40vw; height: 40vw; max-width: 500px; max-height: 500px; background: #ff2f2f; bottom: -10%; right: -5%; animation-delay: -5s; animation-duration: 20s; opacity: 0.30; }
-        
-        @keyframes moveSpotlight {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, 20px) scale(1.1); }
-            100% { transform: translate(-20px, -30px) scale(0.9); }
-        }
+        .orb-services { background: var(--red); top: 10%; right: -5%; }
+        .orb-clients { background: #ff4d4d; bottom: 20%; left: -10%; }
+        .orb-founders { background: var(--orange); top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; }
+        .orb-contact { background: var(--red); bottom: -10%; right: 10%; }
+        .orb-footer { background: #333; top: 0; left: 20%; width: 400px; height: 400px; opacity: 0.1; }
 
-        /* --- FLOATING ICONS --- */
-        .bg-animated-icons { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
-        
-        .bg-icon { 
-            position: absolute; opacity: 0.08; font-size: clamp(2rem, 4vw, 3rem); 
-            animation: floatIcon 15s infinite linear; color: var(--pure-black); 
+        /* Falling/Floating Chillies */
+        .bg-chilli {
+            position: absolute; color: var(--red); opacity: 0.06; z-index: 0;
+            font-size: 4rem;
+            animation: floatChilli 25s infinite linear;
         }
         
-        .adobe-box { 
-            font-family: sans-serif; font-weight: 900; display: flex; align-items: center; justify-content: center; 
-            width: clamp(50px, 8vw, 80px); height: clamp(50px, 8vw, 80px); 
-            font-size: clamp(1.2rem, 2vw, 2.5rem) !important; 
-            border-radius: 12px; opacity: 0.5; background-color: #00005b; 
-        }
-        .adobe-pr { color: #d8a0ff; }
-        .adobe-ae { color: #d8a0ff; }
-
-        .section-dynamic-bg .bg-icon, .section-dark-bg .bg-icon { color: var(--pure-white); opacity: 0.1; }
-        .section-dynamic-bg .adobe-box { border: 1px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-
-        @keyframes floatIcon {
-            0% { transform: translateY(120px) rotate(0deg) scale(0.8); opacity: 0; }
-            20% { opacity: 0.1; }
-            50% { transform: translateY(0px) rotate(10deg) scale(1); opacity: 0.1; }
-            80% { opacity: 0.1; }
-            100% { transform: translateY(-120px) rotate(-10deg) scale(0.8); opacity: 0; }
+        /* Different Chilli Animations */
+        @keyframes floatChilli {
+            0% { transform: translateY(100px) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.06; }
+            80% { opacity: 0.06; }
+            100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
         }
         
-        /* Optimized positions to prevent edge cutoff */
-        .bg-icon:nth-child(1) { top: 10%; left: 5%; animation-duration: 18s; }
-        .bg-icon:nth-child(2) { top: 20%; right: 8%; animation-duration: 22s; animation-delay: -5s; }
-        .bg-icon:nth-child(3) { bottom: 20%; left: 10%; animation-duration: 16s; animation-delay: -2s; }
-        .bg-icon:nth-child(4) { bottom: 15%; right: 15%; animation-duration: 25s; }
-        .bg-icon:nth-child(5) { top: 50%; left: 8%; animation-duration: 16s; }
-        .bg-icon:nth-child(6) { top: 70%; right: 35%; animation-duration: 19s; animation-delay: -8s; }
+        @keyframes fallChilli {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.06; }
+            100% { transform: translateY(400px) rotate(-180deg); opacity: 0; }
+        }
 
-        .hero-content { position: relative; z-index: 3; max-width: 1000px; margin: 0 auto; }
-        /* Responsive Typography using Clamp */
-        .hero h1 { font-size: clamp(2.2rem, 6vw, 5rem); margin-bottom: 1rem; line-height: 1.2; color: var(--pure-black); font-weight: 900; }
-        .hero h1 span { color: var(--primary-color); display: inline-block; }
-        .hero p { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-muted); margin-bottom: 2.5rem; font-weight: 500; max-width: 600px; margin-left: auto; margin-right: auto; }
-        
+        /* --- NAV --- */
+        nav { position: fixed; top: 0; width: 100%; padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(5,5,5,0.85); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 10px; letter-spacing: -1px; }
+        .logo i { color: var(--red); }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--red); }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--white); }
+
+        /* --- CONTINUOUS FIRE BUTTON --- */
         .fire-btn {
-            display: inline-block; padding: 1rem 3rem; background-color: var(--primary-red); color: white;
-            border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            text-decoration: none; position: relative; z-index: 1; border: none;
-            animation: burn-normal 1.5s infinite alternate ease-in-out; transition: all 0.3s ease;
-            white-space: nowrap;
+            position: relative; padding: 1rem 3rem; background: transparent; color: var(--white); 
+            text-decoration: none; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+            border: 2px solid var(--red); border-radius: 6px; overflow: hidden; transition: 0.3s;
+            display: inline-block; cursor: pointer; width: auto;
+            animation: eternalFire 2s infinite ease-in-out;
         }
-        
+        @keyframes eternalFire {
+            0% { box-shadow: 0 0 5px var(--red), inset 0 0 5px var(--red); border-color: var(--red); }
+            50% { box-shadow: 0 0 20px var(--red), inset 0 0 10px var(--orange); border-color: var(--orange); }
+            100% { box-shadow: 0 0 5px var(--red), inset 0 0 5px var(--red); border-color: var(--red); }
+        }
+        .fire-btn:hover {
+            background: var(--red); transform: scale(1.05); animation: none; 
+            box-shadow: 0 0 30px var(--red), 0 0 60px var(--red);
+        }
+
+        /* --- HERO --- */
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 0 5%; }
+        .hero-content { position: relative; z-index: 10; text-align: center; width: 100%; max-width: 1400px; margin-top: 2rem; }
+        .hero h1 { font-size: clamp(1.5rem, 6vw, 6rem); white-space: nowrap; font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; letter-spacing: -1px; }
+        .gradient-text { background: linear-gradient(90deg, #fff, var(--red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: clamp(0.9rem, 2vw, 1.2rem); color: var(--grey); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        /* Hero Layout Icons */
+        .floating-icon-container { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+        .float-obj { position: absolute; opacity: 0.2; animation: float 8s infinite ease-in-out; }
+        .float-icon { font-size: clamp(2rem, 3vw, 3rem); color: var(--white); }
+        .soft-box { 
+            width: clamp(40px, 5vw, 60px); height: clamp(40px, 5vw, 60px); 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: clamp(1rem, 1.5vw, 1.5rem); border: 2px solid rgba(255,255,255,0.3);
+        }
+        .pos-1 { top: 30%; left: 5%; color: var(--white); } 
+        .pos-2 { top: 60%; left: 8%; color: var(--pr-color); border-color: var(--pr-color); } 
+        .pos-3 { top: 30%; right: 5%; color: var(--ae-color); border-color: var(--ae-color); } 
+        .pos-4 { top: 60%; right: 8%; } 
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
         /* --- SECTIONS --- */
-        .section { padding: 5rem 0; position: relative; overflow: hidden; }
-        .section-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; z-index: 3; position: relative;}
-        
-        .section-header { text-align: center; margin-bottom: 3rem; padding: 0 1rem;}
-        .section-header h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 0.5rem; color: var(--pure-black); font-weight: 800; }
-        .section-icon { font-size: 2rem; color: var(--primary-color); transform: rotate(-20deg); display: inline-block; }
+        .section { padding: 5rem 5%; position: relative; }
+        .section-container { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 3rem; position: relative; z-index: 2; }
+        .section-header h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .chilli-icon { color: var(--red); font-size: 1.5rem; margin-bottom: 1rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        .section-dynamic-bg {
-            background: linear-gradient(-45deg, var(--bg-deep-red), var(--primary-red), #942727, var(--bg-deep-red));
-            background-size: 400% 400%; animation: gradientBG 20s ease infinite; color: var(--pure-white);
+        /* --- SERVICES --- */
+        .services-wrapper { position: relative; width: 100%; }
+        .services-scroll-container {
+            display: flex; gap: 1.5rem; overflow-x: auto; padding: 2rem 1rem;
+            scroll-snap-type: x mandatory; scrollbar-width: none;
         }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .section-dynamic-bg .section-header h2 { color: var(--pure-white); }
-        .section-dynamic-bg .section-icon { color: var(--pure-white); }
-
-        /* --- SERVICES (Horizontal Scroll) --- */
-        .services-wrapper { width: 100%; overflow-x: auto; padding-bottom: 2rem; -webkit-overflow-scrolling: touch; }
-        .services-wrapper::-webkit-scrollbar { height: 4px; }
-        .services-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        .services-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
-        
-        .services-grid { display: flex; gap: 2rem; width: max-content; padding: 0 2rem; margin: 0 auto; }
-        @media (min-width: 1400px) { .services-grid { width: 100%; justify-content: center; } }
-
-        .service-card {
-            min-width: 280px; width: 280px; flex-shrink: 0; /* Prevents squashing */
-            background-color: var(--pure-white); padding: 2.5rem 1.5rem;
-            border-radius: 8px; text-align: center; transition: var(--transition); 
-            position: relative; display: flex; flex-direction: column; align-items: center; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); z-index: 2;
+        .services-scroll-container::-webkit-scrollbar { display: none; }
+        .service-card { 
+            flex: 0 0 auto; width: clamp(280px, 80vw, 350px);
+            background: rgba(17, 17, 17, 0.6); backdrop-filter: blur(10px);
+            padding: 2.5rem 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); 
+            transition: all 0.3s; scroll-snap-align: center;
         }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-        .service-icon { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1.5rem; }
-        .service-card h3 { margin-bottom: 1rem; font-size: 1.3rem; color: var(--pure-black); font-weight: 700; }
-        .service-card p { color: var(--text-muted); font-size: 0.95rem; }
+        .service-card:hover { transform: translateY(-10px); border-color: var(--red); background: rgba(20, 20, 20, 0.9); }
+        .service-icon { font-size: 2rem; color: var(--red); margin-bottom: 1.2rem; }
+        .service-card h3 { font-size: 1.3rem; margin-bottom: 0.8rem; font-weight: 700; }
+        .service-card p { color: var(--grey); font-size: 0.95rem; }
+        
+        .scroll-hint { text-align: right; color: var(--grey); font-size: 0.8rem; animation: hintAnim 2s infinite; padding-right: 1rem; display: block; }
+        @media(min-width: 1024px) { .scroll-hint { display: none; } }
+        @keyframes hintAnim { 0%,100%{opacity:0.5; transform:translateX(0);} 50%{opacity:1; transform:translateX(5px);} }
 
         /* --- CLIENTS --- */
-        .clients-section { background-color: var(--off-white); padding: 4rem 0; overflow: hidden; }
-        .scroller-container { width: 100%; overflow: hidden; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
-        .scroller-track { display: flex; gap: 2rem; width: max-content; padding: 2rem 0; animation: scrollLoop 40s linear infinite; } /* Slower animation for better UX */
-        .scroller-track:hover { animation-play-state: paused; }
-        @keyframes scrollLoop { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .clients-section { padding: 5rem 0; overflow: hidden; position: relative; }
+        .clients-track { display: flex; gap: 3rem; width: max-content; animation: scroll 30s linear infinite; padding: 2rem 0; }
+        .clients-track:hover { animation-play-state: paused; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         
-        .client-logo-box { flex: 0 0 250px; height: 150px; background: var(--pure-white); border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .client-logo { 
+            width: 200px; height: 120px; background: rgba(255,255,255,0.03); 
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; backdrop-filter: blur(5px);
+        }
+        .client-logo img { max-width: 70%; max-height: 70%; object-fit: contain; }
+        .client-logo:hover { border-color: var(--red); box-shadow: 0 0 25px rgba(255, 23, 68, 0.3); transform: scale(1.05); z-index: 2; }
 
         /* --- FOUNDERS --- */
-        .founders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto; padding: 0; }
-        .founder-card { background-color: var(--pure-white); border-radius: 8px; overflow: hidden; transition: var(--transition); text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .founder-img-placeholder { width: 100%; height: 250px; background-color: #eaeaea; display: flex; align-items: center; justify-content: center; color: #999; font-size: 4rem; }
-        .founder-info { padding: 1.5rem; }
+        .founders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 900px; margin: 0 auto; }
+        .founder-card { 
+            background: rgba(17, 17, 17, 0.6); backdrop-filter: blur(10px);
+            border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; 
+        }
+        .founder-card:hover { transform: translateY(-5px); border-color: var(--red); }
+        .founder-image { 
+            width: 100%; height: 300px; background: linear-gradient(180deg, rgba(255,23,68,0.1), #000); 
+            display: flex; align-items: center; justify-content: center; font-size: 4rem; color: rgba(255,255,255,0.2); 
+        }
+        .founder-info { padding: 1.5rem; text-align: center; }
+        .founder-info h3 { font-size: 1.4rem; }
+        .founder-role { color: var(--red); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin: 5px 0 10px; }
+        .founder-desc { font-size: 0.9rem; color: var(--grey); }
 
         /* --- CONTACT --- */
-        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 0; }
-        .contact-info h3 { font-size: clamp(1.8rem, 3vw, 2.2rem); margin-bottom: 1rem; color: var(--pure-black); font-weight: 800; }
-        .contact-item { display: flex; align-items: flex-start; margin-bottom: 1.5rem; gap: 1rem; color: var(--dark-grey); }
-        .contact-item i { color: var(--primary-color); font-size: 1.2rem; margin-top: 5px; }
-        .contact-item span { word-break: break-all; } /* Prevents long emails from breaking layout */
-        .form-group { margin-bottom: 1.5rem; }
-        .form-control { width: 100%; padding: 1rem; background-color: var(--off-white); border: 1px solid var(--border-color); border-radius: 4px; transition: var(--transition); font-size: 1rem; }
-        .form-control:focus { outline: none; border-color: var(--primary-color); background-color: var(--pure-white); box-shadow: 0 0 0 2px rgba(166, 25, 46, 0.1); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; }
+        .contact-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .contact-item i { color: var(--red); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(255,23,68,0.1); border-radius: 50%; }
+        .form-control { width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--white); margin-bottom: 1rem; }
+        .form-control:focus { outline: none; border-color: var(--red); background: rgba(255,23,68,0.05); }
 
         /* --- FOOTER --- */
-        footer { background-color: var(--pure-black); color: var(--pure-white); padding: 5rem 0 2rem; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem; padding: 0 2rem; }
-        .footer-col h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; text-transform: uppercase; color: var(--pure-white); }
-        .footer-col ul li a:hover { color: var(--primary-color); padding-left: 5px; }
-        .social-links { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .social-box { width: 40px; height: 40px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #fff; transition: var(--transition); border-radius: 50%; }
-        .social-box:hover { background-color: var(--primary-color); border-color: var(--primary-color); }
-        .footer-bottom { border-top: 1px solid #333; padding-top: 2rem; text-align: center; color: #666; font-size: 0.9rem; }
+        footer { background: #000; padding: 4rem 5% 2rem; border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 2; overflow: hidden; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; position: relative; z-index: 2; }
+        .footer-col h3 { font-size: 1rem; margin-bottom: 1.5rem; text-transform: uppercase; color: var(--white); letter-spacing: 1px; }
+        .footer-col p { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
+        .footer-links li { list-style: none; margin-bottom: 0.8rem; }
+        .footer-links a { color: #888; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .footer-links a:hover { color: var(--red); padding-left: 5px; }
+        .social-row { display: flex; gap: 10px; margin-top: 1rem; }
+        .social-btn { width: 35px; height: 35px; border: 1px solid #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; transition: 0.3s; }
+        .social-btn:hover { background: var(--red); border-color: var(--red); }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid #222; color: #555; font-size: 0.8rem; position: relative; z-index: 2; }
 
-        /* --- MEDIA QUERIES (RESPONSIVENESS) --- */
-        
-        /* Tablet & Small Laptops (1024px and down) */
-        @media (max-width: 1024px) {
-            .section { padding: 4rem 0; }
-            .contact-container { gap: 2rem; }
-            .hero h1 { white-space: normal; } /* Allow breaking on narrower screens */
-        }
-
-        /* Mobile Devices (768px and down) */
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
         @media (max-width: 768px) {
-            nav { padding: 1rem 1.5rem; }
-            
-            .nav-links { 
-                position: fixed; 
-                right: 0; top: 0; 
-                height: 100vh; 
-                background-color: var(--pure-white); 
-                flex-direction: column; 
-                width: 75%; 
-                max-width: 300px;
-                text-align: left; 
-                padding: 6rem 2rem; 
-                gap: 2rem; 
-                transform: translateX(100%); 
-                z-index: 999; 
-                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-                transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1.0);
-            }
-            .nav-links.active { transform: translateX(0); }
-            
-            /* Overlay for menu */
-            .nav-overlay {
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0,0,0,0.5); z-index: 998;
-                opacity: 0; visibility: hidden; transition: all 0.3s;
-                backdrop-filter: blur(3px);
-            }
-            .nav-overlay.active { opacity: 1; visibility: visible; }
-
-            .menu-toggle { display: block; }
-            
-            .hero { padding-top: 8rem; } /* More space for nav */
-            .hero h1 { font-size: 2.5rem; }
-            .spotlight { opacity: 0.3; } /* Less distracting on mobile */
-            
-            .contact-container { grid-template-columns: 1fr; }
-            
-            .client-logo-box { flex: 0 0 160px; height: 100px; }
-            .client-logo-box img { max-width: 70%; max-height: 70%; }
-        }
-
-        /* Small Mobile (480px and down) */
-        @media (max-width: 480px) {
-            .hero-content { width: 100%; }
-            .fire-btn { padding: 0.8rem 2rem; font-size: 0.9rem; width: 100%; text-align: center; }
-            
-            .service-card { min-width: 240px; width: 240px; padding: 2rem 1rem; }
-            
-            .section-header h2 { font-size: 2rem; }
-            .footer-grid { grid-template-columns: 1fr; text-align: center; }
-            .footer-col h3 { justify-content: center; }
-            .footer-col ul { align-items: center; }
-            .social-links { justify-content: center; }
-            .contact-info { text-align: center; }
-            .contact-item { justify-content: center; }
+            .nav-links { position: fixed; top: 0; right: -100%; height: 100vh; flex-direction: column; background: #000; width: 80%; padding: 6rem 2rem; transition: 0.3s; z-index: 999; border-left: 1px solid #222; }
+            .nav-links.active { right: 0; }
+            .menu-toggle { display: block; z-index: 1001; }
+            .hero h1 { font-size: 2.5rem; } 
+            .section { padding: 4rem 5%; }
+            .founders-grid { gap: 1rem; }
+            .founder-image { height: 180px; font-size: 2.5rem; }
+            .founder-info h3 { font-size: 1rem; }
+            .founder-role { font-size: 0.7rem; }
+            .founder-desc { display: none; } 
+            .founder-info { padding: 1rem 0.5rem; }
         }
     </style>
 </head>
 <body>
-
-    <div class="nav-overlay" id="nav-overlay"></div>
-
-    <header>
-        <nav>
-            <div class="logo">
-                <i class="fas fa-pepper-hot"></i> Mirapakaya <span>Media</span>
-            </div>
-            <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#founders">Founders</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-pepper-hot"></i>
+            <span>MIRAPAKAYA</span>
+        </div>
+        <div class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#clients">Clients</a></li>
+            <li><a href="#founders">Founders</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
     <section id="home" class="hero">
-        <div class="hero-spotlights">
-            <div class="spotlight spotlight-1"></div>
-            <div class="spotlight spotlight-2"></div>
+        <div class="bg-dynamic">
+            <div class="bg-grid"></div>
+            <div class="bg-orb orb-hero-1"></div>
+            <div class="bg-orb orb-hero-2"></div>
+            <i class="fas fa-pepper-hot bg-chilli" style="top: 20%; left: 20%; animation-duration: 30s;"></i>
         </div>
-
-        <div class="bg-animated-icons">
-            <i class="fab fa-youtube bg-icon"></i>
-            <i class="fab fa-instagram bg-icon"></i>
-            <i class="fab fa-meta bg-icon"></i>
-            <div class="adobe-box adobe-pr bg-icon">Pr</div>
-            <div class="adobe-box adobe-ae bg-icon">Ae</div>
-            <i class="fas fa-clapperboard bg-icon"></i>
-            <i class="fas fa-camera bg-icon"></i>
-            <i class="fas fa-pepper-hot bg-icon"></i>
+        
+        <div class="floating-icon-container">
+            <i class="fas fa-camera float-obj float-icon pos-1"></i>
+            <div class="float-obj soft-box pos-2">Pr</div>
+            <div class="float-obj soft-box pos-3">Ae</div>
+            <i class="fas fa-clapperboard float-obj float-icon pos-4"></i>
         </div>
 
         <div class="hero-content">
-            <h1>Your Brand <br><span>= Our Spice</span></h1>
-            <p>Spicing up the Digital World. No more boring marketing. We tell your story with heat.</p>
-            <a href="#contact" class="fire-btn">Start The Fire</a>
+            <h1>Your Brand = <span class="gradient-text">Our Spice</span></h1>
+            <p>We ignite your digital presence. Cinematic stories that burn bright.</p>
+            <a href="#contact" class="fire-btn">Ignite Your Brand</a>
         </div>
     </section>
 
-    <section id="services" class="section section-dynamic-bg">
-        <div class="bg-animated-icons">
-            <i class="fas fa-film bg-icon"></i>
-            <i class="fas fa-bullhorn bg-icon"></i>
-            <i class="fas fa-share-nodes bg-icon"></i>
-            <i class="fas fa-wand-magic-sparkles bg-icon"></i>
-            <i class="fas fa-video bg-icon"></i>
-            <i class="fas fa-laptop-code bg-icon"></i>
+    <section id="services" class="section">
+        <div class="bg-dynamic">
+            <div class="bg-grid"></div>
+            <div class="bg-orb orb-services"></div>
+            <i class="fas fa-pepper-hot bg-chilli" style="left: 5%; animation: fallChilli 15s infinite linear;"></i>
+            <i class="fas fa-pepper-hot bg-chilli" style="right: 15%; top: 10%; font-size: 2rem; animation: floatChilli 20s infinite linear reverse;"></i>
         </div>
 
         <div class="section-container">
             <div class="section-header">
-                <h2>Our Services</h2>
-                <i class="fas fa-pepper-hot section-icon"></i>
+                <i class="fas fa-pepper-hot chilli-icon"></i>
+                <h2>What We Do</h2>
             </div>
-        </div>
+            
+            <span class="scroll-hint">Swipe for more <i class="fas fa-arrow-right"></i></span>
 
-        <div class="services-wrapper">
-            <div class="services-grid">
-                <div class="service-card">
-                    <i class="fas fa-video service-icon"></i>
-                    <h3>Short Film Production</h3>
-                    <p>Concept to screen. We handle scripting, filming, and direction for compelling short films.</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-bullhorn service-icon"></i>
-                    <h3>Influencer Marketing</h3>
-                    <p>High-impact commercials and promo videos designed to elevate your brand identity.</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-share-nodes service-icon"></i>
-                    <h3>Social Media Marketing</h3>
-                    <p>Strategic content creation and management to grow your digital presence.</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-wand-magic-sparkles service-icon"></i>
-                    <h3>Editing Services</h3>
-                    <p>Professional post-production, color grading, and visual effects for all video types.</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-chart-line service-icon"></i>
-                    <h3>Performance Marketing</h3>
-                    <p>Data-driven ad campaigns on Facebook, Instagram, and Google to maximize your ROI.</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-laptop-code service-icon"></i>
-                    <h3>Website Development</h3>
-                    <p>We build responsive, visually stunning websites that represent your brand and convert visitors.</p>
+            <div class="services-wrapper">
+                <div class="services-scroll-container">
+                    <div class="service-card">
+                        <i class="fas fa-video service-icon"></i>
+                        <h3>Short Film Production</h3>
+                        <p>Concept to screen. Compelling narratives that tell your story with cinematic excellence.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-bullhorn service-icon"></i>
+                        <h3>Influencer Marketing</h3>
+                        <p>High-impact campaigns designed to elevate your brand and connect authentically.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-share-nodes service-icon"></i>
+                        <h3>Social Media</h3>
+                        <p>Strategic content creation that grows your digital presence and engages communities.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-wand-magic-sparkles service-icon"></i>
+                        <h3>Editing & VFX</h3>
+                        <p>Professional post-production, color grading, and VFX that polish your raw footage.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-chart-line service-icon"></i>
+                        <h3>Performance Marketing</h3>
+                        <p>Data-driven ad campaigns maximizing ROI on Facebook, Instagram, and Google.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-laptop-code service-icon"></i>
+                        <h3>Web Development</h3>
+                        <p>Stunning, responsive websites that represent your brand and convert visitors.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="clients" class="clients-section">
-        <div class="bg-animated-icons">
-             <i class="fas fa-handshake bg-icon"></i>
-             <i class="fas fa-users bg-icon"></i>
-             <i class="fas fa-star bg-icon"></i>
+        <div class="bg-dynamic">
+            <div class="bg-orb orb-clients"></div>
+            <i class="fas fa-pepper-hot bg-chilli" style="right: 5%; bottom: 10%; animation: floatChilli 25s infinite linear;"></i>
         </div>
-
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Trusted By</h2>
-                <i class="fas fa-pepper-hot section-icon"></i>
-                <p style="color: var(--text-muted); margin-top: 10px;">Collaborating with visionary partners</p>
-            </div>
+        <div class="section-header" style="z-index: 2; position: relative;">
+            <h2>Trusted By</h2>
         </div>
-        <div class="scroller-container">
-            <div class="scroller-track">
-                <div class="client-logo-box"><img src="buchibabu.jpg" alt="Client 1"></div>
-                <div class="client-logo-box"><img src="dharmic_minds.jpg" alt="Client 2"></div>
-                <div class="client-logo-box"><img src="aahwanam logo new.png" alt="Client 3"></div>
-                <div class="client-logo-box"><img src="buchibabu.jpg" alt="Client 1"></div>
-                <div class="client-logo-box"><img src="dharmic_minds.jpg" alt="Client 2"></div>
-                <div class="client-logo-box"><img src="aahwanam logo new.png" alt="Client 3"></div>
-                <div class="client-logo-box"><img src="buchibabu.jpg" alt="Client 1"></div>
-                <div class="client-logo-box"><img src="dharmic_minds.jpg" alt="Client 2"></div>
-                <div class="client-logo-box"><img src="aahwanam logo new.png" alt="Client 3"></div>
-                <div class="client-logo-box"><img src="buchibabu.jpg" alt="Client 1"></div>
-                <div class="client-logo-box"><img src="dharmic_minds.jpg" alt="Client 2"></div>
-                <div class="client-logo-box"><img src="aahwanam logo new.png" alt="Client 3"></div>
-            </div>
+        <div class="clients-track">
+            <div class="client-logo"><img src="buchibabu.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="dharmic_minds.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="aahwanam logo new.png" alt="Client"></div>
+            <div class="client-logo"><img src="buchibabu.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="dharmic_minds.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="aahwanam logo new.png" alt="Client"></div>
+            <div class="client-logo"><img src="buchibabu.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="dharmic_minds.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="aahwanam logo new.png" alt="Client"></div>
+            <div class="client-logo"><img src="buchibabu.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="dharmic_minds.jpg" alt="Client"></div>
+            <div class="client-logo"><img src="aahwanam logo new.png" alt="Client"></div>
         </div>
     </section>
 
-    <section id="founders" class="section section-dynamic-bg">
-        <div class="bg-animated-icons">
-             <i class="fas fa-camera bg-icon"></i>
-             <i class="fas fa-pen-nib bg-icon"></i>
-             <i class="fas fa-lightbulb bg-icon"></i>
+    <section id="founders" class="section">
+        <div class="bg-dynamic">
+            <div class="bg-grid"></div>
+            <div class="bg-orb orb-founders"></div>
+            <i class="fas fa-pepper-hot bg-chilli" style="left: 45%; top: -20px; font-size: 5rem; animation: fallChilli 18s infinite linear;"></i>
         </div>
         <div class="section-container">
             <div class="section-header">
-                <h2>Meet The Visionaries</h2>
-                <i class="fas fa-pepper-hot section-icon"></i>
+                <h2>The Visionaries</h2>
             </div>
             <div class="founders-grid">
                 <div class="founder-card">
-                    <div class="founder-img-placeholder"><i class="fas fa-user"></i></div>
-                    <div class="founder-info"><h3>Rathan Guntuka</h3><span class="role">Co-Founder</span><p>Creative director with a passion for storytelling and cinematic excellence.</p></div>
+                    <div class="founder-image"><i class="fas fa-user"></i></div>
+                    <div class="founder-info">
+                        <h3>Rathan Guntuka</h3>
+                        <div class="founder-role">Co-Founder</div>
+                        <p class="founder-desc">Creative Director. Storytelling & Cinematic Excellence.</p>
+                    </div>
                 </div>
                 <div class="founder-card">
-                    <div class="founder-img-placeholder"><i class="fas fa-user-tie"></i></div>
-                    <div class="founder-info"><h3>Karthik Guntuka</h3><span class="role">Co-Founder</span><p>Strategic thinker ensuring every project meets the highest production standards.</p></div>
+                    <div class="founder-image"><i class="fas fa-user-tie"></i></div>
+                    <div class="founder-info">
+                        <h3>Karthik Guntuka</h3>
+                        <div class="founder-role">Co-Founder</div>
+                        <p class="founder-desc">Strategic Lead. Production Standards & Results.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="contact" class="section">
+        <div class="bg-dynamic">
+            <div class="bg-orb orb-contact"></div>
+            <i class="fas fa-pepper-hot bg-chilli" style="left: 10%; bottom: 20%; animation: floatChilli 22s infinite linear;"></i>
+        </div>
         <div class="section-container">
-            <div class="contact-container">
+            <div class="section-header">
+                <h2>Let's Create Fire</h2>
+            </div>
+            <div class="contact-grid">
                 <div class="contact-info">
-                    <h3>Let's Spice It Up</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 2rem;">Ready to add some heat to your content? Reach out to Mirapakaya Media today.</p>
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem;">Spice It Up</h3>
+                    <p style="color: var(--grey); margin-bottom: 2rem;">Ready to bring heat to your brand? Contact us.</p>
                     <div class="contact-item"><i class="fas fa-envelope"></i><span>rathanguntuka2@gmail.com</span></div>
                     <div class="contact-item"><i class="fas fa-phone"></i><span>+91 9014457199</span></div>
                     <div class="contact-item"><i class="fas fa-location-dot"></i><span>Hyderabad, India</span></div>
                 </div>
-                <form class="contact-form" onsubmit="event.preventDefault(); alert('Thanks for contacting Mirapakaya Media!');">
-                    <div class="form-group"><input type="text" class="form-control" placeholder="Your Name" required></div>
-                    <div class="form-group"><input type="email" class="form-control" placeholder="Your Email" required></div>
-                    <div class="form-group"><textarea class="form-control" rows="5" placeholder="Project Details" required></textarea></div>
-                    <button type="submit" class="fire-btn">Send Message</button>
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Message Sent!');">
+                    <input type="text" class="form-control" placeholder="Name" required>
+                    <input type="email" class="form-control" placeholder="Email" required>
+                    <textarea class="form-control" rows="4" placeholder="Project Details" required></textarea>
+                    <button type="submit" class="fire-btn" style="width: 100%; text-align: center;">Send Message</button>
                 </form>
             </div>
         </div>
     </section>
 
     <footer>
+        <div class="bg-dynamic">
+             <div class="bg-orb orb-footer"></div>
+             <i class="fas fa-pepper-hot bg-chilli" style="right: 5%; top: 10%; animation: floatChilli 30s infinite linear reverse;"></i>
+        </div>
         <div class="section-container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h3>MIRAPAKAYA MEDIA</h3>
-                    <p>We Create Visual Masterpieces. We dedicate ourselves to telling your story with cinematic excellence, strategic impact, and a touch of spice.</p>
+                    <h3>Mirapakaya Media</h3>
+                    <p>We create visual masterpieces that tell your story with cinematic excellence and strategic impact.</p>
+                    <div class="social-row">
+                        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
                 </div>
                 
                 <div class="footer-col">
-                    <h3>Quick Links</h3>
-                    <ul>
+                    <h3>Explore</h3>
+                    <ul class="footer-links">
                         <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#clients">Clients</a></li>
-                        <li><a href="#founders">Founders</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#services">Our Services</a></li>
+                        <li><a href="#clients">Success Stories</a></li>
+                        <li><a href="#founders">Team</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
-                    <h3>Our Services</h3>
-                    <ul>
-                        <li><a href="#services">Short Films</a></li>
-                        <li><a href="#services">Brand Advertisements</a></li>
-                        <li><a href="#services">Social Media Marketing</a></li>
-                        <li><a href="#services">Editing & VFX</a></li>
-                        <li><a href="#services">Website Development</a></li>
-                    </ul>
+                    <h3>Office</h3>
+                    <p>Hyderabad, Telangana<br>India, 500081</p>
+                    <p style="margin-top: 1rem; color: var(--red);">+91 9014457199</p>
+                    <p>rathanguntuka2@gmail.com</p>
                 </div>
 
                 <div class="footer-col">
-                    <h3>Get Social</h3>
-                    <p>Follow us for updates and behind-the-scenes content.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-box"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-box"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-box"><i class="fab fa-youtube"></i></a>
-                        <a href="#" class="social-box"><i class="fab fa-twitter"></i></a>
+                    <h3>Newsletter</h3>
+                    <p>Get the latest trends in digital marketing.</p>
+                    <div style="display: flex; gap: 5px; margin-top: 10px;">
+                        <input type="email" placeholder="Email" style="padding: 8px; border-radius: 4px; border: none; width: 100%;">
+                        <button style="padding: 8px; background: var(--red); color: white; border: none; border-radius: 4px; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
                     </div>
                 </div>
             </div>
-
             <div class="footer-bottom">
                 <p>&copy; 2026 Mirapakaya Media. All Rights Reserved.</p>
             </div>
@@ -496,50 +447,38 @@
     </footer>
 
     <script>
-        // --- Menu & Scroll Reveal ---
-        const menuToggle = document.getElementById('mobile-menu');
-        const navLinks = document.querySelector('.nav-links');
-        const navOverlay = document.getElementById('nav-overlay');
-        const links = document.querySelectorAll('.nav-links li');
-        const icon = menuToggle.querySelector('i');
+        const toggle = document.getElementById('menu-toggle');
+        const links = document.getElementById('nav-links');
+        const items = links.querySelectorAll('a');
 
-        function toggleMenu() {
-            navLinks.classList.toggle('active'); 
-            navOverlay.classList.toggle('active');
-            
-            if(navLinks.classList.contains('active')) { 
-                icon.classList.remove('fa-bars'); 
-                icon.classList.add('fa-times'); 
-                document.body.style.overflow = 'hidden'; // Stop background scrolling
-            } else { 
-                icon.classList.remove('fa-times'); 
-                icon.classList.add('fa-bars'); 
-                document.body.style.overflow = 'auto'; // Resume scrolling
-            }
-        }
-
-        menuToggle.addEventListener('click', toggleMenu);
-        navOverlay.addEventListener('click', toggleMenu);
-
-        links.forEach(link => { 
-            link.addEventListener('click', toggleMenu); 
+        toggle.addEventListener('click', () => {
+            links.classList.toggle('active');
+            toggle.querySelector('i').classList.toggle('fa-bars');
+            toggle.querySelector('i').classList.toggle('fa-times');
         });
 
-        // Intersection Observer for Animations
-        const observer = new IntersectionObserver((entries) => { 
-            entries.forEach(entry => { 
-                if (entry.isIntersecting) { 
-                    entry.target.style.opacity = '1'; 
-                    entry.target.style.transform = 'translateY(0)'; 
-                } 
-            }); 
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                links.classList.remove('active');
+                toggle.querySelector('i').classList.remove('fa-times');
+                toggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.service-card, .founder-card').forEach((el) => { 
-            el.style.opacity = '0'; 
-            el.style.transform = 'translateY(20px)'; 
-            el.style.transition = 'all 0.6s ease-out'; 
-            observer.observe(el); 
+        document.querySelectorAll('.service-card, .founder-card, .contact-grid').forEach((el) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
         });
     </script>
 </body>
